@@ -1,0 +1,82 @@
+/* Write a program to play a numbers guessing game. The user thinks of a number between 1 and 100 and your program asks questions
+to figure out what the number is (e.g., "Is the number you are thinking of less than 50?"). Your program should be able to identify 
+the number after asking no more than seven questions. Hint: Use the < and <= operators and the if-else construct */
+
+#include "../../std_lib_facilities.h"
+
+int range_max{ 1000 };
+int range_min{ 1 };
+bool correct{ false };
+int question_count{ 0 };
+
+int average(int val1, int val2) { return (val1 + val2) / 2; }
+
+int question(int guess) {
+
+	char response;
+
+	++question_count;
+	cout << question_count << ". Is the number you are thinking of less than " << guess << '?' << "(Y/N?) ";
+	cin >> response;
+	
+	switch (response)
+	{
+	case 'Y': case 'y':
+		return range_max = guess;
+	case 'N': case 'n':
+		return range_min = guess;
+	default:
+		error("Invalid input");
+	}
+}
+
+int final_question(int guess)
+{
+	char response;
+	
+	++question_count;
+	cout << question_count << ". Is your number " << guess << '?' << "(Y/N?) ";
+
+	cin >> response;
+
+	switch (response)
+	{
+	case 'Y': case'y':
+		correct = true;
+		return guess;
+	case 'N': case'n':
+		--guess;
+		if (guess >= range_min) final_question(guess);
+		else error("No such number exists");
+	default:
+		break;
+	}
+}
+
+int main()
+try
+{
+	cout << "Think of a number between " << range_min << " and " << range_max << '.' << endl;
+	
+	while ((range_max-range_min)>3) {
+		question(average(range_max, range_min));
+	}
+
+	int final_answer;
+
+	while (!correct) {
+		final_answer = final_question(--range_max);
+	}
+	
+	cout << "\nYour number is: " << final_answer << endl;
+
+
+}
+catch (exception& e)
+{
+	cout << "Error: " << e.what() << endl;
+}
+catch (...)
+{
+	cout << "Unknown Error";
+}
